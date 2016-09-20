@@ -60,8 +60,8 @@
 			children = (
 				B88CA5861D8EB4A400EC3892 /* AppDelegate.swift */,
 				B88CA5881D8EB4A400EC3892 /* ViewController.swift */,
-				B88CA5981D8EE5FA00EC3892 /* InteractiveStory.swift */,
 				B88CA59A1D8F110400EC3892 /* PageController.swift */,
+				B88CA5981D8EE5FA00EC3892 /* InteractiveStory.swift */,
 				B88CA58A1D8EB4A400EC3892 /* Main.storyboard */,
 				B88CA58D1D8EB4A400EC3892 /* Assets.xcassets */,
 				B88CA58F1D8EB4A400EC3892 /* LaunchScreen.storyboard */,
@@ -296,6 +296,7 @@
 				B88CA5971D8EB4A400EC3892 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

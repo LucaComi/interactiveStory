@@ -41,12 +41,60 @@ class PageController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor.whiteColor()
         
         // page è stata instanziata nel metodo prepare for segue 
         if let page = page {
             artwork.image = page.story.artwork
             artwork.contentMode = UIViewContentMode.ScaleToFill
-            storyLabel.text = page.story.text
+            // storyLabel.text = page.story.text
+            
+            
+            // nodifico lo stile del paragrafo
+            let attributedString = NSMutableAttributedString(string: page.story.text)
+            let paragraphStyle = NSMutableParagraphStyle()
+           
+            
+            paragraphStyle.lineSpacing = 20
+            
+            // aggiungo l'attributo alla mia string 
+            attributedString.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, attributedString.length))
+            
+            storyLabel.attributedText = attributedString
+            
+            // tutte le cose che trovo nell'inspector posso maneggiarle rapidamente accedendo direttamente all' istanza
+            // la stringa la copio e incollo da internet
+            storyLabel.font = setFont("HelveticaNeue-Thin", textDimension: 20)
+            
+            // posiziono i bottonisono degli optional devo usare if let statement 
+            
+            if let firstChoice = page.firstChoice {
+                firstChoiceButton.setTitle(firstChoice.title, forState: UIControlState.Normal)
+                firstChoiceButton.addTarget(self, action: #selector (PageController.loadFirstChoice), forControlEvents: UIControlEvents.TouchUpInside)
+                
+                
+                
+            }else{
+                // se è nil ho raggiunto la fine della mia storia quindi voglio tornare all'inizio 
+                firstChoiceButton.setTitle("Play Again", forState: UIControlState.Normal)
+                
+                // quando arrivo alla fine devo avere la possibilità di tornare all prima pagina ossia di togliere tutte le view dalla mia pila 
+                firstChoiceButton.addTarget(self, action: #selector(PageController.playAgain), forControlEvents: UIControlEvents.TouchUpInside)
+                
+            }
+            
+            
+            
+            
+            
+            if let secondChoice = page.secondChoice {
+                secondChoiceButton.setTitle(secondChoice.title, forState: UIControlState.Normal)
+                secondChoiceButton.addTarget(self, action: #selector(PageController.loadSeconChoice), forControlEvents: UIControlEvents.TouchUpInside)
+            }
+            
+            
+            
+            
         }
 
         // Do any additional setup after loading the view.
@@ -98,15 +146,97 @@ class PageController: UIViewController {
             
             storyLabel.leadingAnchor.constraintEqualToAnchor(view.leadingAnchor, constant: 30.0),
             storyLabel.trailingAnchor.constraintEqualToAnchor(view.trailingAnchor, constant: -30.0),
-            storyLabel.topAnchor.constraintEqualToAnchor(view.centerXAnchor, constant: 48.0)
+            storyLabel.topAnchor.constraintEqualToAnchor(view.centerYAnchor, constant: 20.0)
             ])
         
         
+        // aggiungo i buttons 
+        
+        view.addSubview(firstChoiceButton)
+        view.addSubview(secondChoiceButton)
+        
+        // disattivo le i vincoli creati in automatico per entrambi 
+        
+        firstChoiceButton.translatesAutoresizingMaskIntoConstraints = false
+        secondChoiceButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        // setto i miei nuovi vincoli 
+        
+        // primo bottone
+        
+        NSLayoutConstraint.activateConstraints([
+            firstChoiceButton.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor, constant: -100),
+            firstChoiceButton.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor)
+            
+            ])
+        NSLayoutConstraint.activateConstraints([
+            secondChoiceButton.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor, constant: -40),
+            secondChoiceButton.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor)
+            
+            ])
         
         
     }
     
+    func loadFirstChoice () {
+        // sono optional devo vedere se riesco ad effettuare l' unwrapping
+        // page la devo cercare newlla viewController altrimenti non me la vedo sono fuori dallo scope
+        
+        if let page = page, firstChoice = page.firstChoice {
+            
+            // accedo alla pagina successiva 
+            
+            let nextPage = firstChoice.page
+            
+            // creo una istanza della pagController relativa alla pagina successiva
+            
+            let pageController = PageController(page: nextPage)
+            
+            // spingo la nuova view sulla pila
+            navigationController?.pushViewController(pageController, animated: true)
+            
+            
+        }
+        
+    }
+        func loadSeconChoice () {
+        
+            if let page = page, secondChoice = page.secondChoice {
+            let nextPage = secondChoice.page
+                let pageController = PageController(page: nextPage)
+                
+                // spingo la nuova view sulla pila
+                
+                navigationController?.pushViewController(pageController, animated: true)
+                
+            
+            }
+        
+    }
+    
+    func playAgain () {
+    // toglie tutte le view dalla pila 
+        
+        navigationController?.popToRootViewControllerAnimated(true)
+    
+    }
     
     
+        
+func setFont (fontName: String, textDimension: CGFloat) -> UIFont {
+    
+    if let font = UIFont(name: fontName, size: textDimension) {
+    return font
+    }else{
+    let fontDefault = UIFont(name: "KannadaSangamMN-Bold ", size: 40)
+    return fontDefault!
+    }
+
+  // aggiungo due metodi per chiamare il caricamento delle pagine nel momento in cui premo i due bottoni
 }
 
+// non devo uscire dall'ultima parentesi perchè esco dal view Controller
+
+
+
+}

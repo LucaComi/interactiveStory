@@ -222,7 +222,7 @@ class PageController: UIViewController {
     }
     
     
-        
+    
 func setFont (fontName: String, textDimension: CGFloat) -> UIFont {
     
     if let font = UIFont(name: fontName, size: textDimension) {

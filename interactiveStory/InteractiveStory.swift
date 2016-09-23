@@ -49,6 +49,23 @@ extension Story {
                                                 // i valori del caso enum sono corretti non c'è modo di sbagliare
     }
     
+    // l'audio lo vado a inserire in questo file perchè e da qui che viene preso tutto il materiale 
+    
+    var soundEffectURL: NSURL {
+        
+        let fileName: String
+        
+        switch self {
+        case .Home: fileName = "HappyEnding"
+        case .Monster: fileName = "Ominous"
+        default: fileName = "PageTurn"
+            }
+        
+        let path = NSBundle.mainBundle().pathForResource(fileName, ofType: "wav")!
+        
+        return NSURL(fileURLWithPath: path)
+    }
+    
     var text: String {
     
         switch self {                           // è un estesione di story quindi è come se facesse parte di Story // ergo posso usare self per riferimi agli        

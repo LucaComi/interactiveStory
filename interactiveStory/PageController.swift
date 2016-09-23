@@ -7,10 +7,14 @@
 //
 
 import UIKit
+import AudioToolbox
 
 class PageController: UIViewController {
   
     var page: Page?
+    
+    // viene settato a zero perchè SystemSoundID è un Typealias di Unsign int 32
+    var sound: SystemSoundID = 0
     
     // elementi per mostrare i vari elementi a livello di programmazione 
     
@@ -192,6 +196,10 @@ class PageController: UIViewController {
             
             let pageController = PageController(page: nextPage)
             
+            // play sound 
+            
+            playSound(nextPage.story.soundEffectURL)
+            
             // spingo la nuova view sulla pila
             navigationController?.pushViewController(pageController, animated: true)
             
@@ -207,6 +215,12 @@ class PageController: UIViewController {
                 
                 // spingo la nuova view sulla pila
                 
+                
+                // play sound 
+                
+                playSound(nextPage.story.soundEffectURL)
+                
+                // vado alla view successiva
                 navigationController?.pushViewController(pageController, animated: true)
                 
             
@@ -237,6 +251,16 @@ func setFont (fontName: String, textDimension: CGFloat) -> UIFont {
 
 // non devo uscire dall'ultima parentesi perchè esco dal view Controller
 
+    func playSound (url : NSURL){
+        
+        // qui lo prendo e lo copio in memoria
+        AudioServicesCreateSystemSoundID(url, &sound)
+        
+        
+        // qui lo riproduco 
+        AudioServicesPlaySystemSound(sound)
+    
+    }
 
 
 }
